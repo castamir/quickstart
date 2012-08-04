@@ -12,6 +12,7 @@
 
 	<script src="http://code.jquery.com/jquery-1.8.1.min.js"></script>
 	<script src="{$basePath}/js/netteForms.js"></script>
+	<script type="text/javascript" src="{$basePath}/js/ajax.js"></script>
 	{block head}{/block}
 </head>
 
@@ -55,7 +56,9 @@
 	</div>
 
 	<div id="content">
+		{snippet flashMessages}
 		<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
+		{/snippet}
 
 		{include #content}
 	</div>
