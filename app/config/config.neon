@@ -20,11 +20,11 @@ common:
 			password: heslo
 
 		session:
-			expiration: 14 days
+			expiration: 30 days
 
 
 	services:
-		authenticator: Authenticator
+		authenticator: Todo\Authenticator
 
 		taskRepository: Todo\TaskRepository
 		userRepository: Todo\UserRepository
