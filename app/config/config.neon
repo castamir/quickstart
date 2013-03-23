@@ -16,8 +16,8 @@ common:
 			errorPresenter: Error
 
 		database:
-			dsn: 'mysql:host=localhost;dbname=test'
-			user:
+			dsn: 'mysql:host=localhost;dbname=quickstart'
+			user: root
 			password:
 
 		session:
@@ -28,6 +28,10 @@ common:
 		authenticator: Authenticator
 		routerFactory: RouterFactory
 		router: @routerFactory::createRouter
+
+		taskRepository: Todo\TaskRepository
+		userRepository: Todo\UserRepository
+		listRepository: Todo\ListRepository
 
 
 	factories:
