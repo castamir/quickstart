@@ -9,14 +9,13 @@ class HomepagePresenter extends BasePresenter
 	/** @var Todo\TaskRepository */
 	private $taskRepository;
 
-
-
-	public function inject(Todo\TaskRepository $taskRepository)
+	/**
+	 * @param Todo\TaskRepository $taskRepository
+	 */
+	public final function injectTaskRepository(Todo\TaskRepository $taskRepository)
 	{
 		$this->taskRepository = $taskRepository;
 	}
-
-
 
 	protected function startup()
 	{
@@ -27,15 +26,11 @@ class HomepagePresenter extends BasePresenter
 		}
 	}
 
-
-
 	/** @return Todo\TaskListControl */
 	public function createComponentIncompleteTasks()
 	{
 		return new Todo\TaskListControl($this->taskRepository->findIncomplete(), $this->taskRepository);
 	}
-
-
 
 	/** @return Todo\TaskListControl */
 	public function createComponentUserTasks()
@@ -44,6 +39,7 @@ class HomepagePresenter extends BasePresenter
 		$control = new Todo\TaskListControl($incomplete, $this->taskRepository);
 		$control->displayList = TRUE;
 		$control->displayUser = FALSE;
+
 		return $control;
 	}
 

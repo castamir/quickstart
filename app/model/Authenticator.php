@@ -1,38 +1,35 @@
 <?php
 
-namespace Todo;
-
-use Nette,
-	Nette\Security,
-	Nette\Utils\Strings;
-
+use Nette\Security, Nette\Utils\Strings;
 
 /**
  * Users authenticator.
  */
 class Authenticator extends Nette\Object implements Security\IAuthenticator
 {
-	/** @var UserRepository */
-	private $users;
 
+	/** @var Todo\UserRepository */
+	private $userRepository;
 
-
-	public function __construct(UserRepository $users)
+	/**
+	 * @param Todo\UserRepository $userRepository
+	 */
+	public function __construct(Todo\UserRepository $userRepository)
 	{
-		$this->users = $users;
+		$this->userRepository = $userRepository;
 	}
-
-
 
 	/**
 	 * Performs an authentication.
-	 * @return Nette\Security\Identity
+	 *
+	 * @param array $credentials
 	 * @throws Nette\Security\AuthenticationException
+	 * @return Nette\Security\Identity
 	 */
 	public function authenticate(array $credentials)
 	{
 		list($username, $password) = $credentials;
-		$row = $this->users->findByName($username);
+		$row = $this->userRepository->findByName($username);
 
 		if (!$row) {
 			throw new Security\AuthenticationException('The username is incorrect.', self::IDENTITY_NOT_FOUND);
@@ -43,35 +40,24 @@ class Authenticator extends Nette\Object implements Security\IAuthenticator
 		}
 
 		unset($row->password);
+
 		return new Security\Identity($row->id, NULL, $row->toArray());
 	}
 
-
-
-	/**
-	 * @param  int $id
-	 * @param  string $password
-	 */
-	public function setPassword($id, $password)
-	{
-		$this->users->findBy(array('id' => $id))->update(array(
-			'password' => $this->calculateHash($password),
-		));
-	}
-
-
-
 	/**
 	 * Computes salted password hash.
-	 * @param string
+	 *
+	 * @param  string $password
+	 * @param  string $salt
 	 * @return string
 	 */
 	public static function calculateHash($password, $salt = NULL)
 	{
-		if ($password === Strings::upper($password)) { // perhaps caps lock is on
-			$password = Strings::lower($password);
+		if ($salt === NULL) {
+			$salt = '$2a$07$' . Nette\Utils\Strings::random(32) . '$';
 		}
-		return crypt($password, $salt ?: '$2a$07$' . Strings::random(22));
+
+		return crypt($password, $salt);
 	}
 
 }

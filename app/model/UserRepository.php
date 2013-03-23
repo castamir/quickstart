@@ -1,21 +1,16 @@
 <?php
-
 namespace Todo;
 
 use Nette;
 
-
-
+/**
+ * Tabulka user
+ */
 class UserRepository extends Repository
 {
 
-
-	/**
-	 * @return Nette\Database\Table\ActiveRow
-	 */
 	public function findByName($username)
 	{
-		return $this->findBy(array('username' => $username))->fetch();
+		return $this->findAll()->where('username', $username)->fetch();
 	}
-
 }

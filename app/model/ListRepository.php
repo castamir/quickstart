@@ -1,33 +1,23 @@
 <?php
-
 namespace Todo;
 
 use Nette;
 
-
-
+/**
+ * Tabulka user
+ */
 class ListRepository extends Repository
 {
 
-	/**
-	 * Vrací úkoly spadající pod danný list.
-	 * @return Nette\Database\Table\Selection
-	 */
 	public function tasksOf(Nette\Database\Table\ActiveRow $list)
 	{
-		return $list->related('task')->order('created');
+		return $list->related('task')->order('done, created');
 	}
 
-
-
-	/**
-	 * @return Nette\Database\Table\ActiveRow
-	 */
 	public function createList($title)
 	{
 		return $this->getTable()->insert(array(
-			'title' => $title,
+			'title' => $title
 		));
 	}
-
 }

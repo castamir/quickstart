@@ -1,24 +1,20 @@
 <?php
-
 namespace Todo;
 
 use Nette;
-
-
 
 class TaskRepository extends Repository
 {
 
 	/**
 	 * Vrací seznam nehotových úkolů.
+	 *
 	 * @return Nette\Database\Table\Selection
 	 */
 	public function findIncomplete()
 	{
-		return $this->findBy(array('done' => false))->order('created ASC');
+		return $this->findBy(array('done' => FALSE))->order('created ASC');
 	}
-
-
 
 	/**
 	 * @return Nette\Database\Table\Selection
@@ -30,25 +26,21 @@ class TaskRepository extends Repository
 		));
 	}
 
-
-
 	/**
-	 * @param int $listId
+	 * @param int    $listId
 	 * @param string $task
-	 * @param int $assignedUser
+	 * @param int    $assignedUser
 	 * @return Nette\Database\Table\ActiveRow
 	 */
 	public function createTask($listId, $task, $assignedUser)
 	{
 		return $this->getTable()->insert(array(
-			'text' => $task,
+			'text'    => $task,
 			'user_id' => $assignedUser,
 			'created' => new \DateTime(),
 			'list_id' => $listId,
 		));
 	}
-
-
 
 	/**
 	 * @param int $id
@@ -57,5 +49,4 @@ class TaskRepository extends Repository
 	{
 		$this->findBy(array('id' => $id))->update(array('done' => 1));
 	}
-
 }

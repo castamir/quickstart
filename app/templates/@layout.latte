@@ -1,71 +1,76 @@
+{**
+ * My Application layout template.
+ *
+ * @param string   $basePath web base path
+ * @param string   $robots   tell robots how to index the content of a page (optional)
+ * @param array    $flashes  flash messages
+ *}
+
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="UTF-8">
-	<meta name="description" content="Nette Framework web application skeleton">
-	<meta name="robots" content="{$robots}" n:ifset="$robots">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="description" content="">
+        <meta name="robots" content="{$robots}" n:ifset="$robots">
 
-	<title>{block title|stripTags|trim}{/block} | Úkolníček</title>
+        <title>{block title|stripTags|strip}Úkolníček{/block}</title>
 
-	<link rel="stylesheet" href="{$basePath}/css/screen.css">
-	<link rel="shortcut icon" href="{$basePath}/favicon.ico">
+        <link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/screen.css">
+        <link rel="shortcut icon" href="{$basePath}/favicon.ico">
 
-	<script src="http://code.jquery.com/jquery-1.8.1.min.js"></script>
-	<script src="{$basePath}/js/netteForms.js"></script>
-	<script type="text/javascript" src="{$basePath}/js/ajax.js"></script>
-	{block head}{/block}
-</head>
+        {block scripts}
+            <script src="{$basePath}/js/jquery.js"></script>
+            <script src="{$basePath}/js/netteForms.js"></script>
+            <script src="{$basePath}/js/main.js"></script>
+        {/block}
 
-<body>
-<div id="header">
-	<div id="header-inner">
-		<div class="title">Úkolníček</div>
+        {block head}{/block}
+    </head>
 
-		<div class="user" n:if="$user->isLoggedIn()">
-			<span class="icon user">{$user->getIdentity()->name}</span> |
-			<a n:href="User:password">Změna hesla</a> |
-			<a n:href="Sign:out">Odhlásit se</a>
-		</div>
-	</div>
-</div>
+    <body>
+        <div id="header">
+            <div id="header-inner">
+                <div class="title"><a n:href="Homepage:">Úkolníček</a></div>
 
-<div id="container">
-	<div id="sidebar">
-		{if $user->isLoggedIn()}
-		<h2><a n:href="Homepage:">Přehled</a></h2>
+                {if $user->isLoggedIn()}
+                    <div class="user">
+                        <span class="icon user">{$user->getIdentity()->name}</span> |
+                        <a n:href="signOut!">Odhlásit se</a>
+                    </div>
+                {/if}
+            </div>
+        </div>
 
-		<div class="task-lists">
-			<h2>Seznamy</h2>
-			<ul>
-				<li n:foreach="$lists as $list"><a n:href="Task: $list->id">{$list->title}</a></li>
-			</ul>
-		</div>
+        <div id="container">
+            <div id="sidebar">
+                {if $user->isLoggedIn()}
+                    <div class="title">Seznamy úkolů</div>
+                    <div class="task-lists">
+                        <ul>
+                            <li n:foreach="$lists as $list"><a n:href="Task: $list->id">{$list->title}</a></li>
+                        </ul>
+                    </div>
+                    <fieldset>
+                        <legend>Nový seznam</legend>
+                        {form newListForm}
+                            <div class="new-list-form">
+                                {input title}
+                                {input create}
+                            </div>
+                        {/form}
+                    </fieldset>
+                {/if}
+            </div>
 
-		<fieldset>
-			<legend>Nový seznam</legend>
-			{form newListForm}
-				<div class="new-list-form">
-					{control $form errors}
+            <div id="content">
+                <div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
 
-					{input title}
-					{input create}
-				</div>
-			{/form}
-		</fieldset>
-		{/if}
-	</div>
+                {include #content}
+            </div>
 
-	<div id="content">
-		{snippet flashMessages}
-		<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
-		{/snippet}
+            <div id="footer">
 
-		{include #content}
-	</div>
-
-	<div id="footer">
-		<a href="http://doc.nette.org">Nette Framework Quick Start example</a>
-	</div>
-</div>
-</body>
+            </div>
+        </div>
+    </body>
 </html>

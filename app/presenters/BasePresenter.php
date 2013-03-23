@@ -2,37 +2,30 @@
 
 use Nette\Application\UI\Form;
 
-
-
 /**
  * Base presenter for all application presenters.
  *
  * @property callable $newListFormSubmitted
  */
+
 abstract class BasePresenter extends Nette\Application\UI\Presenter
 {
 
 	/** @var Todo\ListRepository */
-	private $listRepository;
+	protected $listRepository;
 
-
-
-	public function injectBase(Todo\ListRepository $listRepository)
+	/**
+	 * @param Todo\ListRepository $taskRepository
+	 */
+	public final function injectListRepository(Todo\ListRepository $listRepository)
 	{
 		$this->listRepository = $listRepository;
 	}
 
-
-
 	public function beforeRender()
 	{
 		$this->template->lists = $this->listRepository->findAll()->order('title ASC');
-		if ($this->isAjax()) {
-			$this->invalidateControl('flashMessages');
-		}
 	}
-
-
 
 	/**
 	 * @return Nette\Application\UI\Form
@@ -42,18 +35,13 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in');
 		}
-
 		$form = new Form();
-		$form->addText('title', 'Název:', 15, 50)
-			->addRule(Form::FILLED, 'Musíte zadat název seznamu úkolů.');
-
+		$form->addText('title', 'Název:', 15, 50)->addRule(Form::FILLED, 'Musíte zadat název seznamu úkolů.');
 		$form->addSubmit('create', 'Vytvořit');
 		$form->onSuccess[] = $this->newListFormSubmitted;
 
 		return $form;
 	}
-
-
 
 	public function newListFormSubmitted(Form $form)
 	{
@@ -62,4 +50,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 		$this->redirect('Task:default', $list->id);
 	}
 
+	public function handleSignOut()
+	{
+		$this->getUser()->logout();
+		$this->redirect('Sign:in');
+	}
 }
