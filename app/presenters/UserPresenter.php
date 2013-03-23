@@ -2,7 +2,6 @@
 
 use Nette\Application\UI\Form;
 
-
 /**
  * @property callable $passwordFormSubmitted
  */
@@ -12,18 +11,14 @@ class UserPresenter extends BasePresenter
 	/** @var Todo\UserRepository */
 	private $userRepository;
 
-	/** @var Todo\Authenticator */
+	/** @var Authenticator */
 	private $authenticator;
 
-
-
-	public function inject(Todo\UserRepository $userRepository, Todo\Authenticator $authenticator)
+	public function inject(Todo\UserRepository $userRepository, Authenticator $authenticator)
 	{
 		$this->userRepository = $userRepository;
 		$this->authenticator = $authenticator;
 	}
-
-
 
 	protected function startup()
 	{
@@ -34,16 +29,13 @@ class UserPresenter extends BasePresenter
 		}
 	}
 
-
-
 	/**
 	 * @return Nette\Application\UI\Form
 	 */
 	protected function createComponentPasswordForm()
 	{
 		$form = new Form();
-		$form->addPassword('oldPassword', 'Staré heslo:', 30)
-			->addRule(Form::FILLED, 'Je nutné zadat staré heslo.');
+		$form->addPassword('oldPassword', 'Staré heslo:', 30)->addRule(Form::FILLED, 'Je nutné zadat staré heslo.');
 		$form->addPassword('newPassword', 'Nové heslo:', 30)
 			->addRule(Form::MIN_LENGTH, 'Nové heslo musí mít alespoň %d znaků.', 6);
 		$form->addPassword('confirmPassword', 'Potvrzení hesla:', 30)
@@ -55,8 +47,6 @@ class UserPresenter extends BasePresenter
 
 		return $form;
 	}
-
-
 
 	public function passwordFormSubmitted(Form $form)
 	{

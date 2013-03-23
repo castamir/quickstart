@@ -9,6 +9,7 @@ common:
 
 	php:
 		date.timezone: Europe/Prague
+		# zlib.output_compression: yes
 
 	nette:
 		application:
@@ -17,14 +18,17 @@ common:
 		database:
 			dsn: 'mysql:host=localhost;dbname=quickstart'
 			user: root
-			password: heslo
+			password:
 
 		session:
-			expiration: 30 days
+			autoStart: smart
+			expiration: +30 days
 
 
 	services:
-		authenticator: Todo\Authenticator
+		authenticator: Authenticator
+		routerFactory: RouterFactory
+		router: @routerFactory::createRouter
 
 		taskRepository: Todo\TaskRepository
 		userRepository: Todo\UserRepository

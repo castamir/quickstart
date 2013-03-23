@@ -1,31 +1,24 @@
 <?php
 
-namespace Todo;
-
-use Nette,
-	Nette\Security,
-	Nette\Utils\Strings;
-
+use Nette\Security, Nette\Utils\Strings;
 
 /**
  * Users authenticator.
  */
 class Authenticator extends Nette\Object implements Security\IAuthenticator
 {
-	/** @var UserRepository */
+
+	/** @var Todo\UserRepository */
 	private $users;
 
-
-
-	public function __construct(UserRepository $users)
+	public function __construct(Todo\UserRepository $users)
 	{
 		$this->users = $users;
 	}
 
-
-
 	/**
 	 * Performs an authentication.
+	 *
 	 * @return Nette\Security\Identity
 	 * @throws Nette\Security\AuthenticationException
 	 */
@@ -43,13 +36,12 @@ class Authenticator extends Nette\Object implements Security\IAuthenticator
 		}
 
 		unset($row->password);
+
 		return new Security\Identity($row->id, NULL, $row->toArray());
 	}
 
-
-
 	/**
-	 * @param  int $id
+	 * @param  int    $id
 	 * @param  string $password
 	 */
 	public function setPassword($id, $password)
@@ -59,10 +51,9 @@ class Authenticator extends Nette\Object implements Security\IAuthenticator
 		));
 	}
 
-
-
 	/**
 	 * Computes salted password hash.
+	 *
 	 * @param string
 	 * @return string
 	 */
@@ -71,7 +62,8 @@ class Authenticator extends Nette\Object implements Security\IAuthenticator
 		if ($password === Strings::upper($password)) { // perhaps caps lock is on
 			$password = Strings::lower($password);
 		}
-		return crypt($password, $salt ?: '$2a$07$' . Strings::random(22));
+
+		return crypt($password, $salt ? : '$2a$07$' . Strings::random(22));
 	}
 
 }

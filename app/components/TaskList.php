@@ -4,8 +4,6 @@ namespace Todo;
 
 use Nette;
 
-
-
 class TaskListControl extends Nette\Application\UI\Control
 {
 
@@ -21,8 +19,6 @@ class TaskListControl extends Nette\Application\UI\Control
 	/** @var TaskRepository */
 	private $taskRepository;
 
-
-
 	public function __construct(Nette\Database\Table\Selection $selected, TaskRepository $taskRepository)
 	{
 		parent::__construct(); // vždy je potřeba volat rodičovský konstruktor
@@ -30,19 +26,15 @@ class TaskListControl extends Nette\Application\UI\Control
 		$this->taskRepository = $taskRepository;
 	}
 
-
-
 	public function handleMarkDone($taskId)
 	{
 		$this->taskRepository->markDone($taskId);
-		
+		$this->presenter->flashMessage("Úkol označen jako hotový", "success");
 		if (!$this->presenter->isAjax()) {
 			$this->presenter->redirect('this');
 		}
 		$this->invalidateControl();
 	}
-
-
 
 	public function render()
 	{
