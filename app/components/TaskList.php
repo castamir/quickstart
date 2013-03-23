@@ -1,13 +1,16 @@
 <?php
-
 namespace Todo;
 
 use Nette;
 
-
-
 class TaskListControl extends Nette\Application\UI\Control
 {
+
+	/** @var \Nette\Database\Table\Selection */
+	private $selected;
+
+	/** @var TaskRepository */
+	private $taskRepository;
 
 	/** @var boolean */
 	public $displayUser = TRUE;
@@ -15,34 +18,12 @@ class TaskListControl extends Nette\Application\UI\Control
 	/** @var boolean */
 	public $displayList = FALSE;
 
-	/** @var Nette\Database\Table\Selection */
-	private $selected;
-
-	/** @var TaskRepository */
-	private $taskRepository;
-
-
-
 	public function __construct(Nette\Database\Table\Selection $selected, TaskRepository $taskRepository)
 	{
 		parent::__construct(); // vždy je potřeba volat rodičovský konstruktor
 		$this->selected = $selected;
 		$this->taskRepository = $taskRepository;
 	}
-
-
-
-	public function handleMarkDone($taskId)
-	{
-		$this->taskRepository->markDone($taskId);
-		
-		if (!$this->presenter->isAjax()) {
-			$this->presenter->redirect('this');
-		}
-		$this->invalidateControl();
-	}
-
-
 
 	public function render()
 	{
@@ -53,4 +34,9 @@ class TaskListControl extends Nette\Application\UI\Control
 		$this->template->render();
 	}
 
+	public function handleMarkDone($taskId)
+	{
+		$this->taskRepository->markDone($taskId);
+		$this->presenter->redirect('this');
+	}
 }

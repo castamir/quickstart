@@ -9,42 +9,22 @@ class HomepagePresenter extends BasePresenter
 	/** @var Todo\TaskRepository */
 	private $taskRepository;
 
-
-
-	public function inject(Todo\TaskRepository $taskRepository)
+	/**
+	 * @param Todo\TaskRepository $taskRepository
+	 */
+	public final function injectTaskRepository(Todo\TaskRepository $taskRepository)
 	{
 		$this->taskRepository = $taskRepository;
 	}
 
-
-
-	protected function startup()
+	public function renderDefault()
 	{
-		parent::startup();
-
-		if (!$this->getUser()->isLoggedIn()) {
-			$this->redirect('Sign:in');
-		}
+		$this->template->tasks = $this->taskRepository->findIncomplete();
 	}
 
-
-
-	/** @return Todo\TaskListControl */
 	public function createComponentIncompleteTasks()
 	{
 		return new Todo\TaskListControl($this->taskRepository->findIncomplete(), $this->taskRepository);
-	}
-
-
-
-	/** @return Todo\TaskListControl */
-	public function createComponentUserTasks()
-	{
-		$incomplete = $this->taskRepository->findIncompleteByUser($this->getUser()->getId());
-		$control = new Todo\TaskListControl($incomplete, $this->taskRepository);
-		$control->displayList = TRUE;
-		$control->displayUser = FALSE;
-		return $control;
 	}
 
 }

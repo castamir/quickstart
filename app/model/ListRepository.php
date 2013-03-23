@@ -1,16 +1,15 @@
 <?php
-
 namespace Todo;
 
 use Nette;
-
-
 
 class ListRepository extends Repository
 {
 
 	/**
-	 * Vrací úkoly spadající pod dannı list.
+	 * VracÃ­ Ãºkoly spadajÃ­cÃ­ pod dannÃ½ list.
+	 *
+	 * @param \Nette\Database\Table\ActiveRow $list
 	 * @return Nette\Database\Table\Selection
 	 */
 	public function tasksOf(Nette\Database\Table\ActiveRow $list)
@@ -18,9 +17,8 @@ class ListRepository extends Repository
 		return $list->related('task')->order('created');
 	}
 
-
-
 	/**
+	 * @param $title
 	 * @return Nette\Database\Table\ActiveRow
 	 */
 	public function createList($title)

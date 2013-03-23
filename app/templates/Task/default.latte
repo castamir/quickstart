@@ -1,19 +1,13 @@
 {block content}
+    <h1 n:block="title">{$list->title}</h1>
+    <fieldset>
+        <legend>Přidat úkol</legend>
 
-<h1 n:block="title">{$list->title}</h1>
-
-<fieldset>
-	<legend>Přidat úkol</legend>
-
-	{form taskForm class => ajax}
-	<div class="task-form">
-		{control $form errors}
-
-		{label text /} {input text size => 30, autofocus => true} {label userId /} {input userId} {input create}
-	</div>
-	{/form}
-</fieldset>
-
-{control taskList}
-
+        {form taskForm}
+            <div class="task-form">
+                {label text /} {input text size => 30, autofocus => true} {label userId /} {input userId} {input create}
+            </div>
+        {/form}
+    </fieldset>
+    {control taskList}
 {/block}
