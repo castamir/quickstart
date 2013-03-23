@@ -50,4 +50,14 @@ abstract class Repository extends Nette\Object
 		return $this->getTable()->where($by);
 	}
 
+	/**
+	 * Vrací právě jeden řádek podle primárního klíče
+	 *
+	 * @param $id
+	 * @return Nette\Database\Table\ActiveRow
+	 */
+	public function find($id)
+	{
+		return $this->getTable()->get($id);
+	}
 }

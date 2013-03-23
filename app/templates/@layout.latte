@@ -8,30 +8,50 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="UTF-8">
-	<meta name="description" content="">
-	<meta name="robots" content="{$robots}" n:ifset="$robots">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="description" content="">
+        <meta name="robots" content="{$robots}" n:ifset="$robots">
 
-	<title>{block title|striptags|upper}Nette Application Skeleton{/block}</title>
+        <title>{block title|stripTags|strip}Úkolníček{/block}</title>
 
-	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/screen.css">
-	<link rel="stylesheet" media="print" href="{$basePath}/css/print.css">
-	<link rel="shortcut icon" href="{$basePath}/favicon.ico">
-	{block head}{/block}
-</head>
+        <link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/screen.css">
+        <link rel="shortcut icon" href="{$basePath}/favicon.ico">
 
-<body>
-	<script> document.body.className+=' js' </script>
+        {block scripts}
+            <script src="{$basePath}/js/jquery.js"></script>
+            <script src="{$basePath}/js/netteForms.js"></script>
+            <script src="{$basePath}/js/main.js"></script>
+        {/block}
 
-	<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
+        {block head}{/block}
+    </head>
 
-	{include #content}
+    <body>
+        <div id="header">
+            <div id="header-inner">
+                <div class="title"><a href="{link Homepage:}">Úkolníček</a></div>
+            </div>
+        </div>
 
-	{block scripts}
-	<script src="{$basePath}/js/jquery.js"></script>
-	<script src="{$basePath}/js/netteForms.js"></script>
-	<script src="{$basePath}/js/main.js"></script>
-	{/block}
-</body>
+        <div id="container">
+            <div id="sidebar">
+                <div class="task-lists">
+                    <ul>
+                        <li n:foreach="$lists as $list"><a href="{link Task: $list->id}">{$list->title}</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="content">
+                <div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
+
+                {include #content}
+            </div>
+
+            <div id="footer">
+
+            </div>
+        </div>
+    </body>
 </html>
