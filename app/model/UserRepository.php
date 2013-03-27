@@ -4,11 +4,8 @@ namespace Todo;
 
 use Nette;
 
-
-
 class UserRepository extends Repository
 {
-
 
 	/**
 	 * @return Nette\Database\Table\ActiveRow
